@@ -1,65 +1,77 @@
 archetype ideasbox
 
 constant chairman : address = @tz1ZAQXACaEqryobpBoLbJUc2DjG5ZzrhARu
-constant expiration : date = 2020-07-22
+constant expiration : date = 2020-12-22
 
 asset idea {
-    id      : int;
-    desc    : string;
-    nbvotes : int = 0;
+  id       : nat;
+  desc     : string;
+  nbvotes  : nat = 0;
+  creation : date;
+  author   : address;
 }
 
 asset voter {
-    addr : address;
-    remaining : int = 5;
+  addr      : address;
+  remaining : nat = 5;
 }
 
 asset selected {
-    wid : int;
+  sid : nat;
 }
 
 entry register (a_voter : address) {
-    called by chairman
-    effect { voter.add({addr = a_voter}) }
+  called by chairman
+  effect { voter.add({ addr = a_voter }) }
 }
 
 entry add_idea(description : string) {
-    require {
-        r0 : now <= expiration - 2d;
-    }
-    effect {
-        idea.add({ id = idea.count(); desc = description})
-    }
+  require {
+    r0 : now <= expiration - 2d;
+  }
+  effect {
+    idea.add({
+			id = idea.count();
+			desc = description;
+			creation = now;
+			author = caller
+		})
+  }
 }
 
-entry vote(n : int, weight : int) {
-    specification {
-        p1 : let some v = voter[caller] in
-             let some bv = before.voter[caller] in
-                v.remaining = bv.remaining - weight
-             otherwise true otherwise true
-    }
-    require {
-        r1 : voter.contains(caller);
-        r2 : expiration - 2d < now <= expiration;
-        r3 : voter[caller].remaining >= weight;
-    }
-    effect {
-        voter[caller].remaining -= weight;
-        idea[n].nbvotes += weight;
-    }
+entry vote(n : nat, weight : nat) {
+  require {
+    r1 : voter.contains(caller);
+    r2 : expiration - 2d < now <= expiration;
+    r3 : voter[caller].remaining >= weight;
+  }
+  effect {
+    voter[caller].remaining -= weight;
+    idea[n].nbvotes += weight;
+  }
 }
 
 entry finalize() {
-    called by chairman
-    require {
-        r4 : now > expiration;
-        r5 : selected.count() = 0; /* cannot finalize twice */
-    }
-    effect {
-        for i in idea.select(the.nbvotes >= 5).sort(desc(nbvotes)).head(3) do
-            selected.add({i})
-        done
+  called by chairman
+  require {
+    r4 : now > expiration;
+    r5 : selected.count() = 0;
+  }
+  effect {
+    for i in idea.select(the.nbvotes >= 5).sort(desc(nbvotes)).head(3) do
+        selected.add({i})
+    done
+  }
+}
+
+// SPECIFICATION
+
+specification entry vote (n : nat, weight : nat) {
+	postcondition p1 {
+      let some v = voter[caller] in
+      let some bv = before.voter[caller] in
+        v.remaining = bv.remaining - weight
+      otherwise true otherwise true
     }
 }
 
