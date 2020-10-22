@@ -5,22 +5,28 @@ import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { Divider, Grid } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import StarIcon from '@material-ui/icons/Star';
 
 const Idea = (props) => {
+
+  const ready = false;
+
   return (
     <Card>
       <CardContent>
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <Grid item xs={1} >
-            { (props.boxopen) ? (
+            { (props.boxopen && ready) ? (
               <IconButton color="secondary" aria-label="upload picture" component="span">
                 <ThumbUpIcon />
               </IconButton>
             ) : (
-              (props.winner)? (<StarIcon color="secondary"/>) : (<div></div>)
+              (!props.boxopen) ? (
+                (props.winner)? (<StarIcon color="secondary"/>) : (<div></div>)
+              ) : (
+                <div></div>
+              )
             )}
           </Grid>
           <Grid item xs={11} >

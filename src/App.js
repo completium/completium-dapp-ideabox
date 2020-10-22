@@ -17,6 +17,7 @@ import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
+import { DAppProvider, useReady, useConnect } from './dapp';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -36,10 +37,22 @@ function SortIdeas(ideas, by) {
 }
 
 function App() {
+  return (
+    <DAppProvider appName={appName}>
+      <React.Suspense fallback={null}>
+        <PageRouter />
+      </React.Suspense>
+    </DAppProvider>
+  );
+}
+
+function PageRouter() {
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
-  const [boxOpen, setBoxOpen]     = React.useState(true);
+  const [boxOpen, setBoxOpen]     = React.useState(false);
+
+  const ready = false; /* account is known */
 
   var ideas = SortIdeas(mockupIdeas,ideaSort);
 
@@ -82,8 +95,7 @@ function App() {
           backgroundRepeat  : 'no-repeat',
           backgroundPosition: 'right 50% top 10%',
           height: 410}}>
-        <Account
-          connected={true} />
+        { ready? (<Account />):(<div />) }
         </Container>
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
@@ -116,7 +128,7 @@ function App() {
             )}
         </Grid>
       </Container>
-      { (boxOpen) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
+      { (boxOpen && ready) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
       <Footer appName={appName}></Footer>
       <IdeaForm open={ideaForm} onclose={closeIdeaForm} theme={theme} account={"tz1dZydwVDuz6SH5jCUfCQjqV8YCQimL9GCp"}/>
       <SnackMsg open={viewSnack} theme={theme}/>
