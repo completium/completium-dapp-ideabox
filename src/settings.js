@@ -1,4 +1,4 @@
-export const  contractAddress = "KT1Mu6RJzLpKroggUFSCsPPJuYQTHQESVeR1"
+export const  contractAddress = "KT1Dqdot585sUXtRHdPprD8Nr9QfELwAagHb"
 
 export const mockupIdeas =  [
   { id: "1",

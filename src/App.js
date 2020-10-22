@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { appTitle, appName, mockupIdeas, contractAddress } from './settings.js';
+import { appTitle, appName, mockupIdeas, contractAddress, network } from './settings.js';
 import HeaderBar from './components/HeaderBar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,7 +18,8 @@ import DoneIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
 import { DAppProvider, useReady, useConnect } from './dapp';
-import { compressToBase64, decompressFromBase64 } from 'lz-string'
+import { compressToBase64, decompressFromBase64, decompressFromUint8Array } from 'lz-string'
+import { useTezos, useAccountPkh } from './dapp';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -65,13 +66,42 @@ function decompressAll (ideas) {
   }});
 }
 
+const fromHexString = hexString =>
+  new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
 function PageRouter() {
+  const ready   = useReady();
+  const connect = useConnect();
+
+  const [connected, setConnected] = React.useState(false);
+
+  const handleConnect = React.useCallback(async () => {
+    try {
+      await connect(network);
+      setConnected(true)
+    } catch (err) {
+      alert(err.message);
+    };
+  }, [connect]);
+
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
   const [boxOpen, setBoxOpen]     = React.useState(true);
 
-  const ready = true; /* account is known */
+  const tezos = useTezos();
+
+  if (connected) {
+    tezos.wallet.at('KT1FZqSmpTj5HxtP2qywuEDagkyVx9LX16NV')
+    .then(c => {
+      c.storage().then(s => {
+        let desc = s.idea.get("1").desc;
+        console.log(desc);
+        console.log(decompressFromUint8Array(fromHexString(desc)));
+      })
+    })
+    .catch(error => console.log(`Error: ${error}`));
+  }
 
   var ideas = decompressAll(mockupIdeas)
   ideas = SortIdeas(ideas,ideaSort);
@@ -109,7 +139,7 @@ function PageRouter() {
     <div className="App">
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <HeaderBar appTitle={appTitle}/>
+      <HeaderBar appTitle={appTitle} handleConnect={handleConnect} />
       <Container maxWidth="md" style={{
           backgroundImage : "url(" + process.env.PUBLIC_URL + '/idea-box.svg' + ")",
           backgroundRepeat  : 'no-repeat',

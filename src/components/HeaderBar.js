@@ -10,7 +10,7 @@ import Link from '@material-ui/core/Link';
 const HeaderBar = (props) => {
 
   const wallet = true;
-  const ready = true;
+  const ready = false;
 
   const minWidth = useMediaQuery('(min-width:600px)');
   var visible = minWidth?'visible':'hidden';
@@ -36,7 +36,8 @@ const HeaderBar = (props) => {
               disableElevation
               onClick={props.handleConnect}
               size="small"
-              style={{ position: 'absolute', right: '1%' }}>
+              style={{ position: 'absolute', right: '1%' }}
+              onClick={props.handleConnect}>
               connect to wallet
             </Button>
           ):(
