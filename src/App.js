@@ -50,9 +50,9 @@ function PageRouter() {
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
-  const [boxOpen, setBoxOpen]     = React.useState(false);
+  const [boxOpen, setBoxOpen]     = React.useState(true);
 
-  const ready = false; /* account is known */
+  const ready = true; /* account is known */
 
   var ideas = SortIdeas(mockupIdeas,ideaSort);
 
@@ -117,6 +117,7 @@ function PageRouter() {
               <Grid item xs={12}>
                 <Idea
                   id={idea.id}
+                  title={idea.title}
                   desc={idea.desc}
                   author={idea.author}
                   creation={idea.creation}

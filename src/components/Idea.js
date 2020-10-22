@@ -10,7 +10,7 @@ import StarIcon from '@material-ui/icons/Star';
 
 const Idea = (props) => {
 
-  const ready = false;
+  const ready = true;
 
   return (
     <Card>
@@ -30,11 +30,16 @@ const Idea = (props) => {
             )}
           </Grid>
           <Grid item xs={11} >
-            <Grid container direction="row" justify="flex-start" alignItems="center">
+            <Grid container direction="column" justify="center" alignItems="flex-start" spacing={1}>
+              <Grid item>
+              <Typography
+                  color={(!props.boxopen && !props.winner) ? "textSecondary" : "textPrimary"}
+                  variant="body2" align="left" variant="h6" style={{ paddingLeft: 12 }}> {props.title} </Typography>
+              </Grid>
               <Grid item>
                 <Typography
                   color={(!props.boxopen && !props.winner) ? "textSecondary" : "textPrimary"}
-                  variant="body2" align="left" style={{ paddingLeft: 12 }}> {props.desc} </Typography>
+                  variant="body2" align="left" style={{ paddingLeft: 12, paddingRight: 12 }}> {props.desc} </Typography>
               </Grid>
             </Grid>
           </Grid>

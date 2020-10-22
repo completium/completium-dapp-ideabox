@@ -10,7 +10,7 @@ import Link from '@material-ui/core/Link';
 const HeaderBar = (props) => {
 
   const wallet = true;
-  const ready = false;
+  const ready = true;
 
   const minWidth = useMediaQuery('(min-width:600px)');
   var visible = minWidth?'visible':'hidden';

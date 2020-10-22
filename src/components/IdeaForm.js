@@ -51,7 +51,7 @@ const IdeaForm = (props) => {
           <Grid item>
             <Grid container direction="row" style={{ padding: 16 }} spacing={3}>
               <Grid item>
-                <Typography>author:</Typography>
+                <Typography>Author:</Typography>
               </Grid>
               <Grid>
                 <Typography color="textSecondary" style={{
@@ -64,6 +64,9 @@ const IdeaForm = (props) => {
             </Grid>
           </Grid>
           <Divider></Divider>
+          <Grid item style={{ padding: 16, paddingBottom: 0 }}>
+            <TextField id="standard-basic" label="Enter idea title" fullWidth={true} color="secondary"/>
+          </Grid>
           <Grid item style={{ padding: 16, paddingBottom: 0 }}>
             <TextField
               id="standard-textarea"
