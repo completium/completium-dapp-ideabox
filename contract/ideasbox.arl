@@ -1,11 +1,15 @@
 archetype ideasbox
 
-constant chairman : address = @tz1ZAQXACaEqryobpBoLbJUc2DjG5ZzrhARu
-constant expiration : date = 2020-12-22
+constant chairman : address = @tz1Lc2qBKEWCBeDU8npG6zCeCqpmaegRi6Jg
+
+states =
+| Activated initial
+| Terminated
 
 asset idea {
   id       : nat;
-  desc     : string;
+  title    : bytes;
+  desc     : bytes;
   nbvotes  : nat = 0;
   creation : date;
   author   : address;
@@ -22,16 +26,20 @@ asset selected {
 
 entry register (a_voter : address) {
   called by chairman
+  require {
+    r0 : state = Activated;
+  }
   effect { voter.add({ addr = a_voter }) }
 }
 
-entry add_idea(description : string) {
+entry add_idea(ititle : bytes, description : bytes) {
   require {
-    r0 : now <= expiration - 2d;
+    r1 : state = Activated;
   }
   effect {
     idea.add({
 			id = idea.count();
+      title = ititle;
 			desc = description;
 			creation = now;
 			author = caller
@@ -41,9 +49,9 @@ entry add_idea(description : string) {
 
 entry vote(n : nat, weight : nat) {
   require {
-    r1 : voter.contains(caller);
-    r2 : expiration - 2d < now <= expiration;
+    r2 : voter.contains(caller);
     r3 : voter[caller].remaining >= weight;
+    r4 : state = Terminated;
   }
   effect {
     voter[caller].remaining -= weight;
@@ -51,13 +59,11 @@ entry vote(n : nat, weight : nat) {
   }
 }
 
-entry finalize() {
+transition terminate () {
   called by chairman
-  require {
-    r4 : now > expiration;
-    r5 : selected.count() = 0;
-  }
-  effect {
+  from Activated
+  to Terminated
+  with effect {
     for i in idea.select(the.nbvotes >= 5).sort(desc(nbvotes)).head(3) do
         selected.add({i})
     done
