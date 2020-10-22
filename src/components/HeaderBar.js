@@ -9,7 +9,10 @@ const HeaderBar = (props) => {
   const minWidth = useMediaQuery('(min-width:600px)');
   var visible = minWidth?'visible':'hidden';
   return (
-    <AppBar position="static" color="default" style={{ boxShadow: "none", opacity: 1, /* backgroundColor: '#303030' */ }}>
+    <AppBar position="static" color="default" style={{
+      boxShadow: "none",
+      opacity: 1,
+      /* backgroundColor: '#212121' */ }}>
       <Toolbar>
         <Typography variant="h6" style={{ position : 'absolute', fontFamily : 'Alegreya Sans SC, sans-serif' }}>
           Completium

@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { Divider, Grid } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import StarIcon from '@material-ui/icons/Star';
 
 const Idea = (props) => {
   return (
@@ -14,14 +15,20 @@ const Idea = (props) => {
       <CardContent>
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <Grid item xs={1} >
-            <IconButton color="secondary" aria-label="upload picture" component="span">
-              <ThumbUpIcon />
-            </IconButton>
+            { (props.boxopen) ? (
+              <IconButton color="secondary" aria-label="upload picture" component="span">
+                <ThumbUpIcon />
+              </IconButton>
+            ) : (
+              (props.winner)? (<StarIcon color="secondary"/>) : (<div></div>)
+            )}
           </Grid>
           <Grid item xs={11} >
             <Grid container direction="row" justify="flex-start" alignItems="center">
               <Grid item>
-                <Typography variant="body2" align="left" style={{ paddingLeft: 12 }}> {props.desc} </Typography>
+                <Typography
+                  color={(!props.boxopen && !props.winner) ? "textSecondary" : "textPrimary"}
+                  variant="body2" align="left" style={{ paddingLeft: 12 }}> {props.desc} </Typography>
               </Grid>
             </Grid>
           </Grid>

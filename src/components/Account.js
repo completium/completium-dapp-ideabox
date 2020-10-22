@@ -10,7 +10,7 @@ const Account = (props) => {
       <Container style={{ height: '300px'}}>
         <Container style={{ height: '120px' }}></Container>
         <Paper style={{ opacity: 0.8, paddingLeft: 18, paddingRight: 18 }}>
-          { (props.state === 'loading') ? (
+          { (props.accountState === 'loading') ? (
             <Grid container direction="row" alignItems="center" spacing={2} style={{ height: 64 }}>
               <Grid item xs={12}>
                 <LinearProgress color="secondary" />

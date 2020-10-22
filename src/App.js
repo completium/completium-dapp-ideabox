@@ -15,6 +15,7 @@ import IdeaForm from './components/IdeaForm';
 import SortIdea from './components/SortIdea';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
 
 function SortIdeas(ideas, by) {
@@ -37,7 +38,8 @@ function SortIdeas(ideas, by) {
 function App() {
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
-  const [ideaSort, setIdeaSort]         = React.useState('');
+  const [ideaSort, setIdeaSort]   = React.useState('');
+  const [boxOpen, setBoxOpen]     = React.useState(true);
 
   var ideas = SortIdeas(mockupIdeas,ideaSort);
 
@@ -87,11 +89,11 @@ function App() {
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
             <Chip
-              label={"Box " + contractAddress + " is active"}
-              color="secondary"
+              label={"Box " + contractAddress + ((boxOpen) ? " is active" : "is closed") }
+              color={ (boxOpen) ? "secondary" : "default" }
               clickable
               onDelete={() => {}}
-              deleteIcon={<DoneIcon />}
+              deleteIcon={ (boxOpen) ? <DoneIcon /> : <ClearIcon />}
               variant="outlined"
             />
           </Grid>
@@ -106,13 +108,15 @@ function App() {
                   desc={idea.desc}
                   author={idea.author}
                   creation={idea.creation}
-                  nbvotes={idea.nbvotes}>
+                  nbvotes={idea.nbvotes}
+                  winner={idea.winner}
+                  boxopen={boxOpen}>
                 </Idea>
               </Grid>
             )}
         </Grid>
       </Container>
-      <AddIdea onClick={handleAddIdea}/>
+      { (boxOpen) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
       <Footer appName={appName}></Footer>
       <IdeaForm open={ideaForm} onclose={closeIdeaForm} theme={theme} account={"tz1dZydwVDuz6SH5jCUfCQjqV8YCQimL9GCp"}/>
       <SnackMsg open={viewSnack} theme={theme}/>
