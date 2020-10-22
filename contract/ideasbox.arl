@@ -1,7 +1,6 @@
 archetype ideasbox
 
 constant chairman : address = @tz1Lc2qBKEWCBeDU8npG6zCeCqpmaegRi6Jg
-constant expiration : date = 2020-12-22
 
 states =
 | Activated initial
@@ -9,7 +8,8 @@ states =
 
 asset idea {
   id       : nat;
-  desc     : string;
+  title    : bytes;
+  desc     : bytes;
   nbvotes  : nat = 0;
   creation : date;
   author   : address;
@@ -32,14 +32,14 @@ entry register (a_voter : address) {
   effect { voter.add({ addr = a_voter }) }
 }
 
-entry add_idea(description : string) {
+entry add_idea(ititle : bytes, description : bytes) {
   require {
-    r1 : now <= expiration - 2d;
-    r2 : state = Activated;
+    r1 : state = Activated;
   }
   effect {
     idea.add({
 			id = idea.count();
+      title = ititle;
 			desc = description;
 			creation = now;
 			author = caller
@@ -49,10 +49,9 @@ entry add_idea(description : string) {
 
 entry vote(n : nat, weight : nat) {
   require {
-    r3 : voter.contains(caller);
-    r4 : expiration - 2d < now <= expiration;
-    r5 : voter[caller].remaining >= weight;
-    r6 : state = Terminated;
+    r2 : voter.contains(caller);
+    r3 : voter[caller].remaining >= weight;
+    r4 : state = Terminated;
   }
   effect {
     voter[caller].remaining -= weight;
