@@ -15,6 +15,7 @@ import IdeaForm from './components/IdeaForm';
 import SortIdea from './components/SortIdea';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Check';
+import Account from './components/Account';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -78,34 +79,24 @@ function App() {
           backgroundImage : "url(" + process.env.PUBLIC_URL + '/idea-box.svg' + ")",
           backgroundRepeat  : 'no-repeat',
           backgroundPosition: 'right 50% top 10%',
-          height: 500}}>
-        {/* <ConnectWallet
-          nbMiles={nbMiles}
-          nextExpiration={nextExpiration}
-          handleConnect={handleConnect}
-          openViewMiles={openViewMiles}
-          miles={miles}
-          handleMiles={handleMiles} /> */}
+          height: 410}}>
+        <Account
+          connected={true} />
         </Container>
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
-          <Grid item>
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={3}>
-              <Grid item xs={4}>
-                <SortIdea onClick={handleSort}/>
-              </Grid>
-              <Grid item xs={3}></Grid>
-              <Grid item xs={1}>
-                <Chip
-                label={"Box " + contractAddress + " is active"}
-                color="secondary"
-                clickable
-                onDelete={() => {}}
-                deleteIcon={<DoneIcon />}
-                variant="outlined"
-              />
-              </Grid>
-            </Grid>
+          <Grid item xs={12}>
+            <Chip
+              label={"Box " + contractAddress + " is active"}
+              color="secondary"
+              clickable
+              onDelete={() => {}}
+              deleteIcon={<DoneIcon />}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item >
+            <SortIdea onClick={handleSort}/>
           </Grid>
           {
             ideas.map(idea =>
