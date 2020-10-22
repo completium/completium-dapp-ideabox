@@ -1,7 +1,11 @@
 archetype ideasbox
 
-constant chairman : address = @tz1ZAQXACaEqryobpBoLbJUc2DjG5ZzrhARu
+constant chairman : address = @tz1Lc2qBKEWCBeDU8npG6zCeCqpmaegRi6Jg
 constant expiration : date = 2020-12-22
+
+states =
+| Activated initial
+| Terminated
 
 asset idea {
   id       : nat;
@@ -22,12 +26,16 @@ asset selected {
 
 entry register (a_voter : address) {
   called by chairman
+  require {
+    r0 : state = Activated;
+  }
   effect { voter.add({ addr = a_voter }) }
 }
 
 entry add_idea(description : string) {
   require {
-    r0 : now <= expiration - 2d;
+    r1 : now <= expiration - 2d;
+    r2 : state = Activated;
   }
   effect {
     idea.add({
@@ -41,9 +49,10 @@ entry add_idea(description : string) {
 
 entry vote(n : nat, weight : nat) {
   require {
-    r1 : voter.contains(caller);
-    r2 : expiration - 2d < now <= expiration;
-    r3 : voter[caller].remaining >= weight;
+    r3 : voter.contains(caller);
+    r4 : expiration - 2d < now <= expiration;
+    r5 : voter[caller].remaining >= weight;
+    r6 : state = Terminated;
   }
   effect {
     voter[caller].remaining -= weight;
@@ -51,13 +60,11 @@ entry vote(n : nat, weight : nat) {
   }
 }
 
-entry finalize() {
+transition terminate () {
   called by chairman
-  require {
-    r4 : now > expiration;
-    r5 : selected.count() = 0;
-  }
-  effect {
+  from Activated
+  to Terminated
+  with effect {
     for i in idea.select(the.nbvotes >= 5).sort(desc(nbvotes)).head(3) do
         selected.add({i})
     done
