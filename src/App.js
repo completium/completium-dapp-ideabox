@@ -18,6 +18,7 @@ import DoneIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
 import { DAppProvider, useReady, useConnect } from './dapp';
+import { compressToBase64, decompressFromBase64 } from 'lz-string'
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -46,6 +47,24 @@ function App() {
   );
 }
 
+function compressAll (ideas) {
+  ideas.forEach(idea => {
+    console.info(idea.id);
+    console.info(compressToBase64(idea.title));
+    console.info(compressToBase64(idea.desc));
+  });
+}
+
+function decompressAll (ideas) {
+  return ideas.map(idea => { return {
+      id : idea.id,
+      title: decompressFromBase64(idea.title),
+      desc: decompressFromBase64(idea.desc),
+      author: idea.author,
+      creation: idea.creation
+  }});
+}
+
 function PageRouter() {
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
@@ -54,7 +73,8 @@ function PageRouter() {
 
   const ready = true; /* account is known */
 
-  var ideas = SortIdeas(mockupIdeas,ideaSort);
+  var ideas = decompressAll(mockupIdeas)
+  ideas = SortIdeas(ideas,ideaSort);
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(
