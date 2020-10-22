@@ -51,7 +51,7 @@ entry vote(n : nat, weight : nat) {
   require {
     r2 : voter.contains(caller);
     r3 : voter[caller].remaining >= weight;
-    r4 : state = Terminated;
+    r4 : state = Activated;
   }
   effect {
     voter[caller].remaining -= weight;
