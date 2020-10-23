@@ -75,6 +75,7 @@ const IdeaForm = (props) => {
         }).catch(error => console.log(`Error: ${error}`));
       }).catch(error => console.log(`Error: ${error}`))
     });
+    props.onclose();
   }
 
   return (
