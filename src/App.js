@@ -23,6 +23,7 @@ import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { Tezos } from '@taquito/taquito';
 
 function SortIdeas(ideas, by) {
+  console.log(ideas);
   var newideas = ideas.sort((i1, i2) => {
     if (by === 'sort by votes') {
       return i2.nbvotes - i1.nbvotes;
@@ -36,6 +37,7 @@ function SortIdeas(ideas, by) {
       return true;
     }
   });
+  console.log(newideas);
   return newideas;
 }
 
@@ -132,7 +134,11 @@ function PageRouter() {
   }
 
   function isVoter () {
-    return accountAddress in storage.votes
+    if (storage.votes === undefined) {
+      return false;
+    } else {
+      return accountAddress in storage.votes
+    }
   }
 
   //var ideas = decompressAll(mockupIdeas)
@@ -167,7 +173,8 @@ function PageRouter() {
     setIdeaSort(sort);
     setStorage({
       status: storage.status,
-      ideas: SortIdeas(storage.ideas,sort)
+      ideas: SortIdeas(storage.ideas,sort),
+      votes: storage.votes
     })
   }
 
