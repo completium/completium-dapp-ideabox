@@ -19,7 +19,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array } from 'lz-string'
-import { DAppProvider, useReady, useWallet, useConnect, useAccountPkh } from './dapp';
+import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { Tezos } from '@taquito/taquito';
 
 function SortIdeas(ideas, by) {
@@ -75,14 +75,12 @@ function PageRouter() {
   const connect = useConnect();
   const accountAddress = useAccountPkh();
 
-  const [connected, setConnected] = React.useState(false);
-
-  const [storage, setStorage] = React.useState({ status: false, ideas: [] });
+  const [contract, setContract] = React.useState(null);
+  const [storage, setStorage] = React.useState({ status: false, ideas: [], votes: [] });
 
   const handleConnect = React.useCallback(async () => {
     try {
       await connect(network);
-      setConnected(true)
     } catch (err) {
       alert(err.message);
     };
@@ -108,11 +106,16 @@ function PageRouter() {
           creation: (i.creation+'').substring(0,10),
         });
       });
+      var votes = [];
+      cstorage.voter.forEach((v,k,m) => {
+        votes[k] = parseInt(0+v,10)
+      });
       ids = SortIdeas(ids,'sort by creation');
       console.log(ids);
       setStorage({
         status: (0+cstorage._state === '00'),
-        ideas: ids
+        ideas: ids,
+        votes: votes
       });
     } catch (error) {
       console.log(`Error: ${error}`);
@@ -121,6 +124,10 @@ function PageRouter() {
 
   if (storage.ideas.length === 0) {
     loadIdeaxBoxContent().then(console.log('content loaded'));
+  }
+
+  function isVoter () {
+    return accountAddress in storage.votes
   }
 
   //var ideas = decompressAll(mockupIdeas)
@@ -159,6 +166,15 @@ function PageRouter() {
     })
   }
 
+  const handleReceipt = () => {
+    setViewSnack(false);
+    loadIdeaxBoxContent().then(console.log('content loaded'));
+  }
+
+  const openSnack = () => {
+    setViewSnack(true);
+  }
+
   return (
     <div className="App">
     <ThemeProvider theme={theme}>
@@ -169,7 +185,7 @@ function PageRouter() {
           backgroundRepeat  : 'no-repeat',
           backgroundPosition: 'right 50% top 10%',
           height: 410}}>
-        { ready? (<Account account={accountAddress}/>):(<div />) }
+        { (ready)? (<Account account={accountAddress}  isvoter={isVoter()} nbvotes={storage.votes[accountAddress]}/>):(<div />) }
         </Container>
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
@@ -204,13 +220,15 @@ function PageRouter() {
                   creation={idea.creation}
                   nbvotes={idea.nbvotes}
                   winner={idea.winner}
-                  boxopen={storage.status && ready}>
+                  boxopen={storage.status && ready && isVoter()}
+                  openSnack={openSnack}
+                  handleReceipt={handleReceipt}>
                 </Idea>
               </Grid>
             )}
         </Grid>
       </Container>
-      { (storage.status && ready) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
+      { (storage.status && ready && isVoter() && (!viewSnack)) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
       <Footer appName={appName}></Footer>
       <IdeaForm open={ideaForm} onclose={closeIdeaForm} theme={theme} account={"tz1dZydwVDuz6SH5jCUfCQjqV8YCQimL9GCp"}/>
       <SnackMsg open={viewSnack} theme={theme}/>

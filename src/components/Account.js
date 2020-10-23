@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import SnackMsg from './SnackMsg';
 
 const Account = (props) => {
   return (
@@ -26,12 +27,24 @@ const Account = (props) => {
                   fontFamily: 'Courier Prime, monospace',
                 }}>{props.account}</Typography>
               </Grid>
-              <Grid item xs={3}>
-                <Typography color="textSecondary">Number of votes left:</Typography>
-              </Grid>
-              <Grid>
-                <Typography>{3}</Typography>
-              </Grid>
+              {
+                (props.isvoter)?(
+                  <Grid item xs={3}>
+                    <Grid container direction="row" justify="flex-end" spacing={2}>
+                      <Grid item>
+                        <Typography color="textSecondary">Number of votes left:</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography>{props.nbvotes}</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                ):(
+                  <Grid item xs={3}>
+                    <Typography color="error">Not registered!</Typography>
+                  </Grid>
+                )
+              }
             </Grid>
           )}
         </Paper>
