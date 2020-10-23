@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { appTitle, appName, contractAddress, network } from './settings.js';
+import { appTitle, appName, contractAddress, network /* , mockupIdeas */ } from './settings.js';
 import HeaderBar from './components/HeaderBar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,7 +18,7 @@ import DoneIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array } from 'lz-string'
+import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array/* , compressToUint8Array */ } from 'lz-string'
 import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { Tezos } from '@taquito/taquito';
 
@@ -49,14 +49,17 @@ function App() {
   );
 }
 
-/* function compressAll (ideas) {
+/* const toHexString = bytes =>
+  bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+
+function compressAll (ideas) {
   ideas.forEach(idea => {
     console.info(idea.id);
-    console.info(compressToBase64(idea.title));
-    console.info(compressToBase64(idea.desc));
+    console.info(toHexString(compressToUint8Array(idea.title)));
+    console.info(toHexString(compressToUint8Array(idea.desc)));
   });
-}
-
+} */
+/*
 function decompressAll (ideas) {
   return ideas.map(idea => { return {
       id : idea.id,
@@ -75,6 +78,8 @@ function PageRouter() {
   const connect = useConnect();
   const accountAddress = useAccountPkh();
 
+/*   compressAll(mockupIdeas);
+ */
   const [contract, setContract] = React.useState(null);
   const [storage, setStorage] = React.useState({ status: false, ideas: [], votes: [] });
 
@@ -99,8 +104,8 @@ function PageRouter() {
       cstorage.idea.forEach((i, k, m) => {
         ids.push({
           id:       k,
-          title:    (k !== "8" && k !== "2" && k !== "3")? decompressFromUint8Array(fromHexString(i.title)):"title",
-          desc:     (k !== "2" && k !== "4" && k !== "7")? decompressFromUint8Array(fromHexString(i.desc)):"desc",
+          title:    decompressFromUint8Array(fromHexString(i.title)),
+          desc:     decompressFromUint8Array(fromHexString(i.desc)),
           author:   i.author,
           nbvotes:  parseInt(0+i.nbvotes,10),
           creation: (i.creation+'').substring(0,10),
@@ -230,7 +235,14 @@ function PageRouter() {
       </Container>
       { (storage.status && ready && isVoter() && (!viewSnack)) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
       <Footer appName={appName}></Footer>
-      <IdeaForm open={ideaForm} onclose={closeIdeaForm} theme={theme} account={"tz1dZydwVDuz6SH5jCUfCQjqV8YCQimL9GCp"}/>
+      <IdeaForm
+        open={ideaForm}
+        onclose={closeIdeaForm}
+        theme={theme}
+        account={accountAddress}
+        openSnack={openSnack}
+        handleReceipt={handleReceipt}
+      />
       <SnackMsg open={viewSnack} theme={theme}/>
     </ThemeProvider>
 
