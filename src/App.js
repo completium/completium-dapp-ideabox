@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { appTitle, appName, mockupIdeas, contractAddress, network } from './settings.js';
+import { appTitle, appName, contractAddress, network } from './settings.js';
 import HeaderBar from './components/HeaderBar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,9 +17,10 @@ import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import Account from './components/Account';
-import { DAppProvider, useReady, useConnect } from './dapp';
-import { compressToBase64, decompressFromBase64, decompressFromUint8Array } from 'lz-string'
-import { useTezos, useAccountPkh } from './dapp';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array } from 'lz-string'
+import { DAppProvider, useReady, useWallet, useConnect, useAccountPkh } from './dapp';
+import { Tezos } from '@taquito/taquito';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -48,7 +49,7 @@ function App() {
   );
 }
 
-function compressAll (ideas) {
+/* function compressAll (ideas) {
   ideas.forEach(idea => {
     console.info(idea.id);
     console.info(compressToBase64(idea.title));
@@ -64,16 +65,19 @@ function decompressAll (ideas) {
       author: idea.author,
       creation: idea.creation
   }});
-}
+} */
 
 const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
 function PageRouter() {
-  const ready   = useReady();
+  const ready = useReady();
   const connect = useConnect();
+  const accountAddress = useAccountPkh();
 
   const [connected, setConnected] = React.useState(false);
+
+  const [storage, setStorage] = React.useState({ status: false, ideas: [] });
 
   const handleConnect = React.useCallback(async () => {
     try {
@@ -87,24 +91,40 @@ function PageRouter() {
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
-  const [boxOpen, setBoxOpen]     = React.useState(true);
 
-  const tezos = useTezos();
-
-  if (connected) {
-    tezos.wallet.at('KT1FZqSmpTj5HxtP2qywuEDagkyVx9LX16NV')
-    .then(c => {
-      c.storage().then(s => {
-        let desc = s.idea.get("1").desc;
-        console.log(desc);
-        console.log(decompressFromUint8Array(fromHexString(desc)));
-      })
-    })
-    .catch(error => console.log(`Error: ${error}`));
+  async function loadIdeaxBoxContent () {
+    try {
+      Tezos.setProvider({rpc: 'https://testnet-tezos.giganode.io/'});
+      var contract  = await Tezos.contract.at(contractAddress);
+      var cstorage   = await contract.storage();
+      var ids = [];
+      cstorage.idea.forEach((i, k, m) => {
+        ids.push({
+          id:       k,
+          title:    (k !== "8" && k !== "2" && k !== "3")? decompressFromUint8Array(fromHexString(i.title)):"title",
+          desc:     (k !== "2" && k !== "4" && k !== "7")? decompressFromUint8Array(fromHexString(i.desc)):"desc",
+          author:   i.author,
+          nbvotes:  parseInt(0+i.nbvotes,10),
+          creation: (i.creation+'').substring(0,10),
+        });
+      });
+      ids = SortIdeas(ids,'sort by creation');
+      console.log(ids);
+      setStorage({
+        status: (0+cstorage._state === '00'),
+        ideas: ids
+      });
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    }
   }
 
-  var ideas = decompressAll(mockupIdeas)
-  ideas = SortIdeas(ideas,ideaSort);
+  if (storage.ideas.length === 0) {
+    loadIdeaxBoxContent().then(console.log('content loaded'));
+  }
+
+  //var ideas = decompressAll(mockupIdeas)
+  //ideas = SortIdeas(ideas,ideaSort);
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(
@@ -133,6 +153,10 @@ function PageRouter() {
 
   const handleSort = (sort) => {
     setIdeaSort(sort);
+    setStorage({
+      status: storage.status,
+      ideas: SortIdeas(storage.ideas,sort)
+    })
   }
 
   return (
@@ -141,29 +165,36 @@ function PageRouter() {
       <CssBaseline/>
       <HeaderBar appTitle={appTitle} handleConnect={handleConnect} />
       <Container maxWidth="md" style={{
-          backgroundImage : "url(" + process.env.PUBLIC_URL + '/idea-box.svg' + ")",
+          backgroundImage : "url(" + process.env.PUBLIC_URL + '/idea-box.svg)',
           backgroundRepeat  : 'no-repeat',
           backgroundPosition: 'right 50% top 10%',
           height: 410}}>
-        { ready? (<Account />):(<div />) }
+        { ready? (<Account account={accountAddress}/>):(<div />) }
         </Container>
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
             <Chip
-              label={"Box " + contractAddress + ((boxOpen) ? " is active" : "is closed") }
-              color={ (boxOpen) ? "secondary" : "default" }
+              label={"Box " + contractAddress + ((storage.status) ? " is active" : "is closed") }
+              color={ (storage.status) ? "secondary" : "default" }
               clickable
               onDelete={() => {}}
-              deleteIcon={ (boxOpen) ? <DoneIcon /> : <ClearIcon />}
+              deleteIcon={ (storage.status) ? <DoneIcon /> : <ClearIcon />}
               variant="outlined"
             />
           </Grid>
-          <Grid item >
-            <SortIdea onClick={handleSort}/>
-          </Grid>
+          { (storage.ideas.length === 0) ?(
+              <Grid item xs={12}>
+                <LinearProgress color="secondary" style={{ marginTop: 60 }}/>
+              </Grid>
+            ):(
+              <Grid item >
+                <SortIdea onClick={handleSort}/>
+              </Grid>
+            )
+          }
           {
-            ideas.map(idea =>
+            storage.ideas.map(idea =>
               <Grid item xs={12}>
                 <Idea
                   id={idea.id}
@@ -173,13 +204,13 @@ function PageRouter() {
                   creation={idea.creation}
                   nbvotes={idea.nbvotes}
                   winner={idea.winner}
-                  boxopen={boxOpen}>
+                  boxopen={storage.status && ready}>
                 </Idea>
               </Grid>
             )}
         </Grid>
       </Container>
-      { (boxOpen && ready) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
+      { (storage.status && ready) ? <AddIdea onClick={handleAddIdea}/> : <div/> }
       <Footer appName={appName}></Footer>
       <IdeaForm open={ideaForm} onclose={closeIdeaForm} theme={theme} account={"tz1dZydwVDuz6SH5jCUfCQjqV8YCQimL9GCp"}/>
       <SnackMsg open={viewSnack} theme={theme}/>

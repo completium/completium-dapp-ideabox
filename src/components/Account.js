@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -24,7 +24,7 @@ const Account = (props) => {
               <Grid>
                 <Typography style={{
                   fontFamily: 'Courier Prime, monospace',
-                }}>tz1dZydwVDuz6SH5jCUfCQjqV8YCQimL9GCp</Typography>
+                }}>{props.account}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography color="textSecondary">Number of votes left:</Typography>

@@ -6,12 +6,11 @@ import '../index.css';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import { useReady, useWallet } from '../dapp';
 
 const HeaderBar = (props) => {
-
-  const wallet = true;
-  const ready = false;
-
+  const ready = useReady();
+  const wallet = useWallet();
   const minWidth = useMediaQuery('(min-width:600px)');
   var visible = minWidth?'visible':'hidden';
   return (
@@ -32,9 +31,8 @@ const HeaderBar = (props) => {
         { ready? (
             <div></div>
           ): (wallet? (
-            <Button variant="contained" size="medium" color="secondary"
+            <Button variant="contained" color="secondary"
               disableElevation
-              onClick={props.handleConnect}
               size="small"
               style={{ position: 'absolute', right: '1%' }}
               onClick={props.handleConnect}>
