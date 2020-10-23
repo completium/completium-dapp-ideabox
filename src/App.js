@@ -23,7 +23,6 @@ import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { Tezos } from '@taquito/taquito';
 
 function SortIdeas(ideas, by) {
-  console.log(ideas);
   var newideas = ideas.sort((i1, i2) => {
     if (by === 'sort by votes') {
       return i2.nbvotes - i1.nbvotes;
@@ -37,7 +36,6 @@ function SortIdeas(ideas, by) {
       return true;
     }
   });
-  console.log(newideas);
   return newideas;
 }
 
@@ -102,6 +100,8 @@ function PageRouter() {
       Tezos.setProvider({rpc: 'https://testnet-tezos.giganode.io/'});
       var contract  = await Tezos.contract.at(contractAddress);
       var cstorage   = await contract.storage();
+      var winners = [];
+      cstorage.selected.forEach(w => winners.push(parseInt(0+w)));
       var ids = [];
       cstorage.idea.forEach((i, k, m) => {
         ids.push({
@@ -111,6 +111,7 @@ function PageRouter() {
           author:   i.author,
           nbvotes:  parseInt(0+i.nbvotes,10),
           creation: (i.creation+'').substring(0,10),
+          winner:   winners.includes(parseInt(k))
         });
       });
       var votes = [];
@@ -122,7 +123,7 @@ function PageRouter() {
       setStorage({
         status: (0+cstorage._state === '00'),
         ideas: ids,
-        votes: votes
+        votes: votes,
       });
     } catch (error) {
       console.log(`Error: ${error}`);
@@ -174,7 +175,7 @@ function PageRouter() {
     setStorage({
       status: storage.status,
       ideas: SortIdeas(storage.ideas,sort),
-      votes: storage.votes
+      votes: storage.votes,
     })
   }
 
