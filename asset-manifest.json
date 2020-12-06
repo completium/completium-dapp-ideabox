@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/completium-dapp-ideabox/static/css/main.5533175d.chunk.css",
-    "main.js": "/completium-dapp-ideabox/static/js/main.746fe9dc.chunk.js",
-    "main.js.map": "/completium-dapp-ideabox/static/js/main.746fe9dc.chunk.js.map",
+    "main.js": "/completium-dapp-ideabox/static/js/main.1fc1c0ca.chunk.js",
+    "main.js.map": "/completium-dapp-ideabox/static/js/main.1fc1c0ca.chunk.js.map",
     "runtime-main.js": "/completium-dapp-ideabox/static/js/runtime-main.085e7e1c.js",
     "runtime-main.js.map": "/completium-dapp-ideabox/static/js/runtime-main.085e7e1c.js.map",
     "static/js/2.5f676bfe.chunk.js": "/completium-dapp-ideabox/static/js/2.5f676bfe.chunk.js",
     "static/js/2.5f676bfe.chunk.js.map": "/completium-dapp-ideabox/static/js/2.5f676bfe.chunk.js.map",
     "index.html": "/completium-dapp-ideabox/index.html",
-    "precache-manifest.372efdcf4d1589cadcf201ac7d94fabe.js": "/completium-dapp-ideabox/precache-manifest.372efdcf4d1589cadcf201ac7d94fabe.js",
+    "precache-manifest.a48469031b07a8962756a7f57b5448dd.js": "/completium-dapp-ideabox/precache-manifest.a48469031b07a8962756a7f57b5448dd.js",
     "service-worker.js": "/completium-dapp-ideabox/service-worker.js",
     "static/css/main.5533175d.chunk.css.map": "/completium-dapp-ideabox/static/css/main.5533175d.chunk.css.map",
     "static/js/2.5f676bfe.chunk.js.LICENSE.txt": "/completium-dapp-ideabox/static/js/2.5f676bfe.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.085e7e1c.js",
     "static/js/2.5f676bfe.chunk.js",
     "static/css/main.5533175d.chunk.css",
-    "static/js/main.746fe9dc.chunk.js"
+    "static/js/main.1fc1c0ca.chunk.js"
   ]
 }
