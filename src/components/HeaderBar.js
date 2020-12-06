@@ -13,8 +13,9 @@ const HeaderBar = (props) => {
   const wallet = useWallet();
   const minWidth = useMediaQuery('(min-width:600px)');
   var visible = minWidth?'visible':'hidden';
+  var dark = props.theme.palette.type === 'dark';
   return (
-    <AppBar position="static" color="default" style={{
+    <AppBar position="static" color={dark?"default":"secondary"}  style={{
       boxShadow: "none",
       opacity: 1,
       /* backgroundColor: '#212121' */ }}>
@@ -22,7 +23,7 @@ const HeaderBar = (props) => {
         <Typography variant="h6" style={{ position: 'absolute', fontFamily : 'Alegreya Sans SC, sans-serif' }}>
           Completium
         </Typography>
-        <Typography variant="h6" color="secondary" style={{
+        <Typography variant="h6" style={{
           flexGrow : 1,
           visibility: visible,
           }}>

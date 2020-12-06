@@ -145,7 +145,7 @@ function PageRouter() {
   //var ideas = decompressAll(mockupIdeas)
   //ideas = SortIdeas(ideas,ideaSort);
 
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersDarkMode = false; /*useMediaQuery('(prefers-color-scheme: dark)');*/
   const theme = React.useMemo(
     () =>
       createMuiTheme({
@@ -192,19 +192,25 @@ function PageRouter() {
     <div className="App">
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <HeaderBar appTitle={appTitle} handleConnect={handleConnect} />
+      <HeaderBar theme={theme} appTitle={appTitle} handleConnect={handleConnect} />
       <Container maxWidth="md" style={{
-          backgroundImage : "url(" + process.env.PUBLIC_URL + '/idea-box.svg)',
-          backgroundRepeat  : 'no-repeat',
-          backgroundPosition: 'right 50% top 10%',
-          height: 410}}>
-        { (ready)? (<Account account={accountAddress}  isvoter={isVoter()} nbvotes={storage.votes[accountAddress]}/>):(<div />) }
+          height: 120}}>
+        { (ready)? (
+            <Account account={accountAddress}  isvoter={isVoter()} nbvotes={storage.votes[accountAddress]}/>
+          ):(
+            <div style={{
+              height: 500,
+             /*  backgroundImage : "url(" + process.env.PUBLIC_URL + '/idea-box.svg)',
+              backgroundRepeat  : 'no-repeat',
+              backgroundPosition: 'right 50% top 10%', */}} />
+          )
+        }
         </Container>
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
             <Chip
-              label={"Box " + contractAddress + ((storage.status) ? " is active" : "is closed") }
+              label={"Box " + contractAddress + ((storage.status) ? " is active" : " is closed") }
               color={ (storage.status) ? "secondary" : "default" }
               clickable
               onDelete={() => {}}

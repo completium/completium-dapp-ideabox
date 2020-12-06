@@ -9,7 +9,7 @@ import SnackMsg from './SnackMsg';
 const Account = (props) => {
   return (
       <Container style={{ height: '300px'}}>
-        <Container style={{ height: '120px' }}></Container>
+        <Container style={{ height: '40px' }}></Container>
         <Paper style={{ opacity: 0.8, paddingLeft: 18, paddingRight: 18 }}>
           { (props.accountState === 'loading') ? (
             <Grid container direction="row" alignItems="center" spacing={2} style={{ height: 64 }}>
