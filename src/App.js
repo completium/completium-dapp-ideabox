@@ -20,7 +20,7 @@ import Account from './components/Account';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array/* , compressToUint8Array */ } from 'lz-string'
 import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
-import { Tezos } from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -97,7 +97,7 @@ function PageRouter() {
 
   async function loadIdeaxBoxContent () {
     try {
-      Tezos.setProvider({rpc: 'https://testnet-tezos.giganode.io/'});
+      const Tezos = new TezosToolkit('https://delphinet-tezos.giganode.io');
       var contract  = await Tezos.contract.at(contractAddress);
       var cstorage   = await contract.storage();
       var winners = [];

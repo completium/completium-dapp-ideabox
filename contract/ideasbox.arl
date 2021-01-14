@@ -1,6 +1,6 @@
 archetype ideasbox
 
-constant chairman : address = @tz1Lc2qBKEWCBeDU8npG6zCeCqpmaegRi6Jg
+constant chairman : address = @tz1MZrh8CvYkp7BfLQMcm6mg5FvL5HRZfACw
 
 states =
 | Activated initial

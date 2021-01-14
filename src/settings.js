@@ -1,4 +1,4 @@
-export const  contractAddress = "KT1HNsJScj3HfK831xqViGxWsbDbczdKPax4"
+export const  contractAddress = "KT1QMowNVCUngertU7bAeoZmU7XYm3gphE69"
 
 /* export const mockupIdeas =  [
   { id: "1",
@@ -124,6 +124,8 @@ export const githubUrl = "https://github.com/edukera/completium-dapp-ideabox"
 
 export const appTitle = "Vote for the best ideas!"
 
-export const network = "carthagenet"
+export const network = "delphinet"
 
 export const appName = "IdeaCorp."
+
+export const nodeURL = 'https://delphinet-tezos.giganode.io'
