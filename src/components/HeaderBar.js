@@ -28,7 +28,7 @@ const HeaderBar = (props) => {
           {props.appTitle}
         </Typography>
         <WalletButton handleConnect={props.handleConnect}/>
-        <a href="https://edukera.github.io/completium-landing/docs/dapp-ideabox/prerequisites" target="_blank">
+        <a href="https://edukera.github.io/completium-landing/docs/dapp-ideabox/presentation" target="_blank">
           <Button style={{ color: 'white' }} component="span">
             <HelpOutlineIcon/>
           </Button>
