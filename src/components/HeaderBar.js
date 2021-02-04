@@ -5,13 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import '../index.css';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button';
-import { useReady, useWallet } from '../dapp';
 import WalletButton from './WalletButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 const HeaderBar = (props) => {
-  const ready = useReady();
-  const wallet = useWallet();
   const minWidth = useMediaQuery('(min-width:600px)');
   var visible = minWidth?'visible':'hidden';
   var dark = props.theme.palette.type === 'dark';

@@ -21,6 +21,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array/* , compressToUint8Array */ } from 'lz-string'
 import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { TezosToolkit } from '@taquito/taquito';
+import Link from '@material-ui/core/Link';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -209,6 +210,7 @@ function PageRouter() {
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
+            <Link href={"https://better-call.dev/delphinet/"+contractAddress+"/operations"} rel="noopener" underline="none">
             <Chip
               label={"Box " + contractAddress + ((storage.status) ? " is active" : " is closed") }
               color={ (storage.status) ? "secondary" : "default" }
@@ -217,6 +219,7 @@ function PageRouter() {
               deleteIcon={ (storage.status) ? <DoneIcon /> : <ClearIcon />}
               variant="outlined"
             />
+            </Link>
           </Grid>
           { (storage.ideas.length === 0) ?(
               <Grid item xs={12}>
