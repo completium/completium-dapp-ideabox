@@ -42,14 +42,11 @@ function SortIdeas(ideas, by) {
 
 function App() {
   return (
-    ///////////////////////////////////////////////////////////////////////////
-    // FIX ME
-    // Wrap the App's body with <DAppProvider> tag/function in order to benefit
-    // from wallet's service as defined in dapp.js
-    ///////////////////////////////////////////////////////////////////////////
-    <React.Suspense fallback={null}>
+    <DAppProvider appName={appName}>
+      <React.Suspense fallback={null}>
         <PageRouter />
-    </React.Suspense>
+      </React.Suspense>
+    </DAppProvider>
   );
 }
 
