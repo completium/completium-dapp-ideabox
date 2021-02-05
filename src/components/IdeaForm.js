@@ -64,17 +64,13 @@ const IdeaForm = (props) => {
   }
   const handleSubmit = () => {
     console.info(state);
-    tezos.wallet.at(contractAddress).then(contract => {
-      var t = toHexString(compressToUint8Array(state.title));
-      var d = toHexString(compressToUint8Array(state.desc));
-      contract.methods.add_idea(t, d).send().then( op => {
-        console.log(`waiting for ${op.opHash} to be confirmed`);
-        props.openSnack();
-        op.receipt().then(() => {
-          props.handleReceipt();
-        }).catch(error => console.log(`Error: ${error}`));
-      }).catch(error => console.log(`Error: ${error}`))
-    });
+    ///////////////////////////////////////////////////////////////////////////
+    // FIX ME
+    // Invoke 'add_idea' method with title and description arguments
+    // title is stored in `state.title` variable and description in `state.desc`
+    // These parameters must be compressed and Hex-encoded with:
+    // x => toHexString(compressToUint8Array(x)) function
+    ///////////////////////////////////////////////////////////////////////////
     props.onclose();
   }
 

@@ -42,11 +42,14 @@ function SortIdeas(ideas, by) {
 
 function App() {
   return (
-    <DAppProvider appName={appName}>
-      <React.Suspense fallback={null}>
+    ///////////////////////////////////////////////////////////////////////////
+    // FIX ME
+    // Wrap the App's body with <DAppProvider> tag/function in order to benefit
+    // from wallet's service as defined in dapp.js
+    ///////////////////////////////////////////////////////////////////////////
+    <React.Suspense fallback={null}>
         <PageRouter />
-      </React.Suspense>
-    </DAppProvider>
+    </React.Suspense>
   );
 }
 
@@ -98,34 +101,20 @@ function PageRouter() {
 
   async function loadIdeaxBoxContent () {
     try {
-      const Tezos = new TezosToolkit('https://delphinet-tezos.giganode.io');
-      var contract  = await Tezos.contract.at(contractAddress);
-      var cstorage   = await contract.storage();
-      var winners = [];
-      cstorage.selected.forEach(w => winners.push(parseInt(0+w)));
-      var ids = [];
-      cstorage.idea.forEach((i, k, m) => {
-        ids.push({
-          id:       k,
-          title:    decompressFromUint8Array(fromHexString(i.title)),
-          desc:     decompressFromUint8Array(fromHexString(i.desc)),
-          author:   i.author,
-          nbvotes:  parseInt(0+i.nbvotes,10),
-          creation: (i.creation+'').substring(0,10),
-          winner:   winners.includes(parseInt(k))
-        });
-      });
-      var votes = [];
-      cstorage.voter.forEach((v,k,m) => {
-        votes[k] = parseInt(0+v,10)
-      });
-      ids = SortIdeas(ids,'sort by creation');
-      console.log(ids);
-      setStorage({
-        status: (0+cstorage._state === '00'),
-        ideas: ids,
-        votes: votes,
-      });
+      ///////////////////////////////////////////////////////////////////////////
+      // FIX ME
+      // Read contract's storage to fill the following local variables:
+      // var winners = [];
+      // var ids = [];
+      // var votes = [];
+      // var state = 0;
+      // Invoke 'setStorage' method
+      // setStorage({
+      //  status: state,
+      //  ideas: ids,
+      //  votes: votes,
+      // });
+      ///////////////////////////////////////////////////////////////////////////
     } catch (error) {
       console.log(`Error: ${error}`);
     }

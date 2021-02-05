@@ -15,15 +15,12 @@ const Idea = (props) => {
   const ready = useReady();
 
   const handleVote = () => {
-    tezos.wallet.at(contractAddress).then(contract => {
-      contract.methods.vote(props.id, 1).send().then( op => {
-        console.log(`waiting for ${op.opHash} to be confirmed`);
-        props.openSnack();
-        op.receipt().then(() => {
-          props.handleReceipt();
-        });
-      })
-    });
+    ///////////////////////////////////////////////////////////////////////////
+    // FIX ME
+    // Invoke 'vote' method with:
+    // * idea identifier
+    // * vote weight (set to 1)
+    ///////////////////////////////////////////////////////////////////////////
   }
 
   return (
