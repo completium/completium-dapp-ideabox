@@ -1,4 +1,4 @@
-export const  contractAddress = "KT1QMowNVCUngertU7bAeoZmU7XYm3gphE69"
+export const  contractAddress = "KT1QNURPMuFJSmTLRttRutb4gfJ6NS4BfsM6"
 
 /* export const mockupIdeas =  [
   { id: "1",
@@ -124,8 +124,9 @@ export const githubUrl = "https://github.com/edukera/completium-dapp-ideabox"
 
 export const appTitle = "Vote for the best ideas!"
 
-export const network = "delphinet"
+export const network  = "edo2net"
+export const endpoint = 'https://edonet-tezos.giganode.io/'
+export const bcdUrl   = "https://better-call.dev/edo2net/" + contractAddress
 
 export const appName = "IdeaCorp."
 
-export const nodeURL = 'https://delphinet-tezos.giganode.io'
