@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { appTitle, appName, contractAddress, network /* , mockupIdeas */ } from './settings.js';
+import { appTitle, appName, contractAddress, network, endpoint, bcdUrl /* , mockupIdeas */ } from './settings.js';
 import HeaderBar from './components/HeaderBar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -196,7 +196,7 @@ function PageRouter() {
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
-            <Link href={"https://better-call.dev/delphinet/"+contractAddress+"/operations"} rel="noopener" underline="none">
+            <Link href={bcdUrl + "/operations"} rel="noopener" underline="none" target="_blank">
             <Chip
               label={"Box " + contractAddress + ((storage.status) ? " is active" : " is closed") }
               color={ (storage.status) ? "secondary" : "default" }
