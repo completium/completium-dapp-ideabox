@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "284cccce0ed079bbc72a252d891e2dd8",
+    "revision": "1282dcd76c908ed25b7e1c1ae41e5484",
     "url": "/completium-dapp-ideabox/index.html"
   },
   {
-    "revision": "23396a6a998dda7a16aa",
+    "revision": "64b00600822de06f913a",
     "url": "/completium-dapp-ideabox/static/css/main.5533175d.chunk.css"
   },
   {
-    "revision": "b2e30bfcc04c487df077",
-    "url": "/completium-dapp-ideabox/static/js/2.5d144d96.chunk.js"
+    "revision": "ac70eee76f5a4175f822",
+    "url": "/completium-dapp-ideabox/static/js/2.bea1ad21.chunk.js"
   },
   {
     "revision": "e99e785e7f1297ef036da972610c4827",
-    "url": "/completium-dapp-ideabox/static/js/2.5d144d96.chunk.js.LICENSE.txt"
+    "url": "/completium-dapp-ideabox/static/js/2.bea1ad21.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "23396a6a998dda7a16aa",
-    "url": "/completium-dapp-ideabox/static/js/main.dc058d12.chunk.js"
+    "revision": "64b00600822de06f913a",
+    "url": "/completium-dapp-ideabox/static/js/main.a75ce85e.chunk.js"
   },
   {
     "revision": "25b23a1464cf0642ff00",
