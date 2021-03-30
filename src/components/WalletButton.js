@@ -19,7 +19,7 @@ const WalletButton = (props) => {
         ):(
           <Link href="https://templewallet.com/" rel="noopener" underline="none" style={{
             position: 'absolute',
-            right: '90px'
+            right: '90%'
           }}>
             <Button variant="contained" size="small" disableElevation
               style={{
