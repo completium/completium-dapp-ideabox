@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "46f9321182cea2b887f38467f5269fe9",
+    "revision": "fcb768ea66008b87aefceb97b0a164ec",
     "url": "/completium-dapp-ideabox/index.html"
   },
   {
-    "revision": "4618792f4e51642098bb",
+    "revision": "62a38be200319e814f8f",
     "url": "/completium-dapp-ideabox/static/css/main.5533175d.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/completium-dapp-ideabox/static/js/2.4c6d9fb0.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4618792f4e51642098bb",
-    "url": "/completium-dapp-ideabox/static/js/main.b2b6827e.chunk.js"
+    "revision": "62a38be200319e814f8f",
+    "url": "/completium-dapp-ideabox/static/js/main.913f0037.chunk.js"
   },
   {
     "revision": "25b23a1464cf0642ff00",
