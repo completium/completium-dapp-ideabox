@@ -125,7 +125,7 @@ export const githubUrl = "https://github.com/edukera/completium-dapp-ideabox"
 export const appTitle = "Vote for the best ideas!"
 
 export const network  = "edo2net"
-export const endpoint = 'https://edonet-tezos.giganode.io/'
+export const endpoint = 'https://edonet.smartpy.io'
 export const bcdUrl   = "https://better-call.dev/edo2net/" + contractAddress
 
 export const appName = "IdeaCorp."
