@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "fcb768ea66008b87aefceb97b0a164ec",
+    "revision": "cf8341a2d23d37d4ace89c0227b755d8",
     "url": "/completium-dapp-ideabox/index.html"
   },
   {
