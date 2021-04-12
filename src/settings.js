@@ -21,7 +21,7 @@ export function useSettings() {
   }
 
   const setContract = (c) => { setState((s) => {
-      return { ...s, constract: c };
+      return { ...s, contract: c };
     });
   }
 
