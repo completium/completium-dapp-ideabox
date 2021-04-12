@@ -28,7 +28,7 @@ export const SettingsPanel = (props) => {
     setContract(addr);
     setNetwork(network);
     setEndpoint(endpoint);
-    props.clearStorage();
+    props.reloadStorage();
     hideSettings();
   }
   return (

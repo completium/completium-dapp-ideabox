@@ -87,6 +87,7 @@ function PageRouter() {
  */
   const [contract, setContract] = React.useState(null);
   const [storage, setStorage] = React.useState({ status: false, ideas: [], votes: [] });
+  const [reload, setReload] = React.useState(true);
 
   const handleConnect = React.useCallback(async () => {
     try {
@@ -100,8 +101,8 @@ function PageRouter() {
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
 
-  const clearStorage = () => {
-    setStorage({ status: false, ideas: [], votes: [] });
+  const reloadStorage = () => {
+    setReload(true);
   }
 
   async function loadIdeaxBoxContent () {
@@ -134,12 +135,14 @@ function PageRouter() {
         ideas: ids,
         votes: votes,
       });
+      setReload(false);
     } catch (error) {
+      setReload(false);
       console.log(`Error: ${error}`);
     }
   }
 
-  if (storage.ideas.length === 0) {
+  if (reload) {
     loadIdeaxBoxContent().then(console.log('content loaded'));
   }
 
@@ -229,7 +232,7 @@ function PageRouter() {
             />
             </Link>
           </Grid>
-          { (storage.ideas.length === 0) ?(
+          { (reload) ?(
               <Grid item xs={12}>
                 <LinearProgress color="secondary" style={{ marginTop: 60 }}/>
               </Grid>
@@ -268,7 +271,7 @@ function PageRouter() {
         openSnack={openSnack}
         handleReceipt={handleReceipt}
       />
-      <SettingsPanel clearStorage={ clearStorage }/>
+      <SettingsPanel reloadStorage={ reloadStorage }/>
       <SnackMsg open={viewSnack} theme={theme}/>
     </ThemeProvider>
 
