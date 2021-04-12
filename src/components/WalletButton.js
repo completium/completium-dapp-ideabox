@@ -12,7 +12,7 @@ const WalletButton = (props) => {
           <Button variant="contained" color="secondary"
             disableElevation
             size="small"
-            style={{ position: 'absolute', right: '90px' }}
+            style={{ position: 'absolute', right: '160px' }}
             onClick={props.handleConnect}>
             connect to wallet
           </Button>

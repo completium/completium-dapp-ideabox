@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { appTitle, appName, contractAddress, network, endpoint, bcdUrl /* , mockupIdeas */ } from './settings.js';
+import { appTitle, appName, SettingsProvider, useSettingsContext } from './settings.js';
 import HeaderBar from './components/HeaderBar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,6 +22,7 @@ import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array/
 import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { TezosToolkit } from '@taquito/taquito';
 import Link from '@material-ui/core/Link';
+import { SettingsPanel } from './components/Settings';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -43,9 +44,11 @@ function SortIdeas(ideas, by) {
 function App() {
   return (
     <DAppProvider appName={appName}>
+      <SettingsProvider>
       <React.Suspense fallback={null}>
         <PageRouter />
       </React.Suspense>
+      </SettingsProvider>
     </DAppProvider>
   );
 }
@@ -78,6 +81,7 @@ function PageRouter() {
   const ready = useReady();
   const connect = useConnect();
   const accountAddress = useAccountPkh();
+  const { settings, getBcdUrl } = useSettingsContext();
 
 /*   compressAll(mockupIdeas);
  */
@@ -86,7 +90,7 @@ function PageRouter() {
 
   const handleConnect = React.useCallback(async () => {
     try {
-      await connect(network);
+      await connect(settings.network);
     } catch (err) {
       alert(err.message);
     };
@@ -96,10 +100,14 @@ function PageRouter() {
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
 
+  const clearStorage = () => {
+    setStorage({ status: false, ideas: [], votes: [] });
+  }
+
   async function loadIdeaxBoxContent () {
     try {
-      const Tezos = new TezosToolkit(endpoint);
-      var contract  = await Tezos.contract.at(contractAddress);
+      const Tezos = new TezosToolkit(settings.endpoint);
+      var contract  = await Tezos.contract.at(settings.contract);
       var cstorage   = await contract.storage();
       var winners = [];
       cstorage.selected.forEach(w => winners.push(parseInt(0+w)));
@@ -210,9 +218,9 @@ function PageRouter() {
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
-            <Link href={bcdUrl + "/operations"} rel="noopener" underline="none" target="_blank">
+            <Link href={getBcdUrl() + "/operations"} rel="noopener" underline="none" target="_blank">
             <Chip
-              label={"Box " + contractAddress + ((storage.status) ? " is active" : " is closed") }
+              label={"Box " + settings.contract + ((storage.status) ? " is active" : " is closed") }
               color={ (storage.status) ? "secondary" : "default" }
               clickable
               onDelete={() => {}}
@@ -260,6 +268,7 @@ function PageRouter() {
         openSnack={openSnack}
         handleReceipt={handleReceipt}
       />
+      <SettingsPanel clearStorage={ clearStorage }/>
       <SnackMsg open={viewSnack} theme={theme}/>
     </ThemeProvider>
 
