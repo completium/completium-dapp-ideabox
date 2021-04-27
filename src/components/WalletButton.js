@@ -9,17 +9,17 @@ const WalletButton = (props) => {
   return ((ready) ? (
         <div></div>
       ) :(wallet ? (
-          <Button variant="contained" color="secondary"
+          <Button color="secondary"
             disableElevation
             size="small"
-            style={{ position: 'absolute', right: '90px' }}
+            style={{ color: 'white', position: 'absolute', right: '160px' }}
             onClick={props.handleConnect}>
             connect to wallet
           </Button>
         ):(
           <Link href="https://templewallet.com/" rel="noopener" underline="none" style={{
             position: 'absolute',
-            right: '90%'
+            right: '160px'
           }}>
             <Button variant="contained" size="small" disableElevation
               style={{

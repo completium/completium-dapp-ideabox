@@ -7,6 +7,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button';
 import WalletButton from './WalletButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { SettingsButton } from './Settings';
 
 const HeaderBar = (props) => {
   const minWidth = useMediaQuery('(min-width:600px)');
@@ -18,7 +19,7 @@ const HeaderBar = (props) => {
       opacity: 1,
       /* backgroundColor: '#212121' */ }}>
       <Toolbar>
-        <Typography variant="h6" style={{ position: 'absolute', fontFamily : 'Alegreya Sans SC, sans-serif' }}>
+        <Typography variant="h6" style={{ fontFamily : 'Alegreya Sans SC, sans-serif' }}>
           Completium
         </Typography>
         <Typography variant="h6" style={{
@@ -28,7 +29,8 @@ const HeaderBar = (props) => {
           {props.appTitle}
         </Typography>
         <WalletButton handleConnect={props.handleConnect}/>
-        <a href="https://edukera.github.io/completium-landing/docs/dapp-ideabox/presentation" target="_blank">
+        <SettingsButton />
+        <a href="https://completium.com/docs/dapp-ideabox" target="_blank">
           <Button style={{ color: 'white' }} component="span">
             <HelpOutlineIcon/>
           </Button>

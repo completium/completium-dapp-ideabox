@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useTezos } from '../dapp';
 import { compressToUint8Array } from 'lz-string'
-import { contractAddress } from '../settings.js';
+import { useSettingsContext } from '../settings.js';
 
 const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
@@ -49,6 +49,7 @@ const DialogContent = withStyles((theme) => ({
 const IdeaForm = (props) => {
   const tezos = useTezos();
   const [state, setState] = React.useState({ title: "", desc: "" });
+  const { settings } = useSettingsContext();
   const handleChange = (event) => {
     if (event.target.id === 'standard-basic') {
       setState({

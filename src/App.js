@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { appTitle, appName, contractAddress, network, endpoint, bcdUrl /* , mockupIdeas */ } from './settings.js';
+import { appTitle, appName, SettingsProvider, useSettingsContext } from './settings.js';
 import HeaderBar from './components/HeaderBar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,6 +22,7 @@ import { /* compressToBase64, decompressFromBase64, */ decompressFromUint8Array/
 import { DAppProvider, useReady, useConnect, useAccountPkh } from './dapp';
 import { TezosToolkit } from '@taquito/taquito';
 import Link from '@material-ui/core/Link';
+import { SettingsPanel } from './components/Settings';
 
 function SortIdeas(ideas, by) {
   var newideas = ideas.sort((i1, i2) => {
@@ -43,9 +44,11 @@ function SortIdeas(ideas, by) {
 function App() {
   return (
     <DAppProvider appName={appName}>
+      <SettingsProvider>
       <React.Suspense fallback={null}>
         <PageRouter />
       </React.Suspense>
+      </SettingsProvider>
     </DAppProvider>
   );
 }
@@ -78,15 +81,17 @@ function PageRouter() {
   const ready = useReady();
   const connect = useConnect();
   const accountAddress = useAccountPkh();
+  const { settings, getBcdUrl } = useSettingsContext();
 
 /*   compressAll(mockupIdeas);
  */
   const [contract, setContract] = React.useState(null);
   const [storage, setStorage] = React.useState({ status: false, ideas: [], votes: [] });
+  const [reload, setReload] = React.useState(true);
 
   const handleConnect = React.useCallback(async () => {
     try {
-      await connect(network);
+      await connect(settings.network);
     } catch (err) {
       alert(err.message);
     };
@@ -95,6 +100,10 @@ function PageRouter() {
   const [viewSnack, setViewSnack] = React.useState(false);
   const [ideaForm, setIdeaForm]   = React.useState(false);
   const [ideaSort, setIdeaSort]   = React.useState('');
+
+  const reloadStorage = () => {
+    setReload(true);
+  }
 
   async function loadIdeaxBoxContent () {
     try {
@@ -113,11 +122,12 @@ function PageRouter() {
       // });
       ///////////////////////////////////////////////////////////////////////////
     } catch (error) {
+      setReload(false);
       console.log(`Error: ${error}`);
     }
   }
 
-  if (storage.ideas.length === 0) {
+  if (reload) {
     loadIdeaxBoxContent().then(console.log('content loaded'));
   }
 
@@ -196,9 +206,9 @@ function PageRouter() {
         <Container maxWidth="md">
         <Grid container direction="row" spacing={2} style={{ marginBottom: 100 }}>
           <Grid item xs={12}>
-            <Link href={bcdUrl + "/operations"} rel="noopener" underline="none" target="_blank">
+            <Link href={getBcdUrl() + "/operations"} rel="noopener" underline="none" target="_blank">
             <Chip
-              label={"Box " + contractAddress + ((storage.status) ? " is active" : " is closed") }
+              label={"Box " + settings.contract + ((storage.status) ? " is active" : " is closed") }
               color={ (storage.status) ? "secondary" : "default" }
               clickable
               onDelete={() => {}}
@@ -207,7 +217,7 @@ function PageRouter() {
             />
             </Link>
           </Grid>
-          { (storage.ideas.length === 0) ?(
+          { (reload) ?(
               <Grid item xs={12}>
                 <LinearProgress color="secondary" style={{ marginTop: 60 }}/>
               </Grid>
@@ -246,6 +256,7 @@ function PageRouter() {
         openSnack={openSnack}
         handleReceipt={handleReceipt}
       />
+      <SettingsPanel reloadStorage={ reloadStorage }/>
       <SnackMsg open={viewSnack} theme={theme}/>
     </ThemeProvider>
 
